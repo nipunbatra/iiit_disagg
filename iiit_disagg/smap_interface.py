@@ -7,6 +7,18 @@ from nilmtk.sensors.electricity import Measurement
 
 
 def to_pd_series(smap_data):
+    """Converts sMAP like data to a pandas DataFrame
+
+    Parameters
+    ---------
+    smap_data: List of Lists
+        Contains data in sMAP format as follows: [[timestamp (ms), power]]
+
+    Returns
+    -------
+    df: pandas.DataFrame
+        index: datetime, columns=nilmtk.Measurement
+    """
     df = pd.DataFrame(
         smap_data, columns=['timestamp', Measurement('power', 'active')])
     df.index = pd.to_datetime(df.timestamp, unit='ms')
@@ -16,7 +28,20 @@ def to_pd_series(smap_data):
 
 class SMAP(object):
 
+    """sMAP interface
+    """
+
     def __init__(self, base_url, query_path="/api/query/", data_path="backend/api/data/"):
+        """
+        Parameters
+        ----------
+        base_url : string
+            URL where sMAP instance is running
+        query_path : string
+            API query path
+        data_path : string
+            Path to `get` data
+        """
         self.base_url = base_url
         self.query_path = query_path
         self.data_path = data_path
@@ -24,8 +49,25 @@ class SMAP(object):
         self.data_path = "".join([self.base_url, self.data_path])
 
     def get_readings(self, uuid, start_time, end_time):
+        """Get readings from sMAP server for a `uuid` between 
+        start_time and end_time
+
+        Parameters
+        ---------
+        uuid : string
+            Unique identifier for the sMAP channel
+        start_time : long int
+            Timestamp in milliseconds
+        end_time : long int
+            Timestamp in milliseconds
+
+        Returns
+        -------
+        smap_data : List of Lists
+            Contains data in sMAP format as follows: [[timestamp (ms), power]]
+        """
         query = "{}uuid/{}?starttime={}&endtime={}".format(self.data_path,
                                                            uuid, start_time, end_time)
         response = requests.get(query).json()
-        data = response[0]['Readings']
-        return data
+        smap_data = response[0]['Readings']
+        return smap_data
