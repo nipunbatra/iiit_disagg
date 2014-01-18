@@ -1,4 +1,5 @@
 from distutils.core import setup
+import warnings
 """
 Following Segment of this file was taken from the Pandas 
 project(https://github.com/pydata/pandas) 
@@ -64,6 +65,4 @@ setup(
     url='https://github.com/nipunreddevil/iiit_disagg',
     license='',
     description='Non Intrusive Load Monitoring',
-    install_requires=[
-    ],
 )

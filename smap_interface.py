@@ -17,11 +17,8 @@ def to_pd_series(smap_data):
 class SMAP(object):
 
     def __init__(self, base_url, query_path="/api/query/", data_path="backend/api/data/"):
-        self.base_url = base_url
-        self.query_path = query_path
-        self.data_path = data_path
-        self.post_url = "".join([self.base_url, self.query_path])
-        self.data_path = "".join([self.base_url, self.data_path])
+        self.post_url = "".join([base_url, query_path])
+        self.data_path = "".join([base_url, data_path])
 
     def get_readings(self, uuid, start_time, end_time):
         query = "{}uuid/{}?starttime={}&endtime={}".format(self.data_path,
