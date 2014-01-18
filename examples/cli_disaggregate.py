@@ -31,7 +31,7 @@ b.utility.electric.mains[MainsName(1, 1)] = df
 disaggregator = CO_1d()
 
 # Loading model
-disaggregator.import_model(model.json)
+disaggregator.import_model('model.json')
 
 # Perform disaggregation
 disaggregator.disaggregate(b)
