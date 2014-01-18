@@ -1,7 +1,7 @@
 """Illustrates disaggregation using NILMTK CO on the command line"""
 
-from ..smap_interface import SMAP
-from ..smap_interface import to_pd_series
+from iiit_disaggregate.smap_interface import SMAP
+from iiit_disaggregate.smap_interface import to_pd_series
 from nilmtk.building import Building
 from nilmtk.sensors.electricity import MainsName, Measurement
 from nilmtk.disaggregate.co_1d import CO_1d
