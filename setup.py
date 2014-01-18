@@ -1,5 +1,6 @@
 from distutils.core import setup
 import warnings
+import setuptools
 """
 Following Segment of this file was taken from the Pandas 
 project(https://github.com/pydata/pandas) 
