@@ -13,7 +13,7 @@ END = 1388341800000
 DISAGG_FEATURE = Measurement('power', 'active')
 
 # Making SMAP connection
-smap = SMAP("http://192.168.1.40:9102/")
+smap = SMAP("http://nms.iiitd.edu.in:9102/")
 
 # Getting data for UUID
 smap_readings = smap.get_readings(UUID, START, END)

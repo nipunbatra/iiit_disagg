@@ -71,3 +71,7 @@ class SMAP(object):
         response = requests.get(query).json()
         smap_data = response[0]['Readings']
         return smap_data
+
+    def get_uuid(self, home_number):
+        """Returns the UUID corresponding to a home"""
+        return '273e1b0f-ef25-5918-ad67-efa56a834d6e'

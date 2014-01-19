@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>iAWE</title>   
+  
+  <link rel="stylesheet" href="static/css/jquery-ui.css" />
+  <script src="static/js/jquery-1.9.1.js"></script>
+  <script src="static/js/jquery-ui.js"></script>
+  <script src="static/js/highcharts.js"></script> 
+  <link href='static/css/sofia.css' rel='stylesheet' type='text/css'>
+
+  <script src="{{ url_for('static', filename='js/lean-slider.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/noty/jquery.noty.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/noty/layouts/center.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static',filename='js/noty/themes/default.js') }}"></script>
+  <script type=text/javascript>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-45323576-1', 'iiitd.edu.in');
+  ga('send', 'pageview');
+
+    var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+    jQuery.ajaxSetup({
+      async : false
+    });
+      
+        //var n = noty({text: 'noty - a jquery notification library!'});
+
+        function showNoty(text, position, closeButton) {
+          var noty_id = noty({
+            "text" : text,
+            "theme" : "noty_theme_twitter",
+            "layout" : position,
+            "type" : "error",
+            "animateOpen" : {
+              "height" : "toggle"
+            },
+            "animateClose" : {
+              "height" : "toggle"
+            },
+            "speed" : 0,
+            "timeout" : 0,
+            "closeButton" : closeButton,
+            "closeOnSelfClick" : true,
+            "closeOnSelfOver" : false,
+
+          });
+
+          return noty_id;
+        }
+      </script>
+      <strong>
+      
+
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/lean-slider.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/sample-styles.css') }}">
+
+      </strong>
+    </head>
+    <body>
+      <header>
+
+        <div class="container">
+          <h1 class="logo" style="font-family: 'Sofia'">iAWE 
+          </h1>
+          <strong><nav>
+            <ul class="menu">
+              <li><a href="{{ url_for('home') }}">Home</a></li>
+              <li><a href="{{ url_for('visualize') }}">Visualize</a></li>
+                        
+            </ul>
+          </nav></strong>
+        </div>
+      </header>
+      
+
+      <div class="container">
+        {% block content %}
+        {% endblock %}
+      </div>
+    </body>
+    
+    </html>
