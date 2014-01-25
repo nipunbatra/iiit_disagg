@@ -37,7 +37,6 @@ def randomword(length):
 
 def pd_to_higcharts(predictions):
     total_power = predictions.sum().sum()
-    print total_power, type(total_power)
     num_rows = len(predictions.index)
     temp = np.empty((num_rows, 2))
     times = predictions.index.astype(int) / 1e6
@@ -95,7 +94,6 @@ def query():
     uuid = smap.get_uuid(home_number)
     smap_readings = smap.get_readings(uuid, start_timestamp, end_timestamp)
 
-    print smap_readings
     df = to_pd_series(smap_readings)
 
     # Creating nilmtk building
@@ -113,4 +111,4 @@ def query():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=5000)
