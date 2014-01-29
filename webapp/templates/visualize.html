@@ -4,7 +4,7 @@
 div #sidebar
 {
 border:2px solid #a1a1a1;
-padding:5px 10px; 
+padding:2px 5px; 
 border-radius:15px;
 }
 </style>
@@ -14,17 +14,18 @@ border-radius:15px;
 	<br/>
 	<select id="homes">
   		
-  	<option>101</option>  
-  	<option>102</option>
- 	<option>103</option>
-  	<option>104</option>
-	</select>
+  	<option>102</option>  
+  	<option>503</option>
+  	<option>703</option>
+
+ 	</select>
 	<br/>
 
 	<p>Start Date: <input type="text" id="start_date" size="10"/></p>
 	<p>End Date: <input type="text" id="end_date" size="10"/></p>
-	<span id="hint" style="font-size:x-small;">Select date between 16 May and 5 August</span><br/>
-	<button type="button" id="query">View Data</button>
+	<button type="button" id="query_raw"><font size="1">View raw</font></button>
+	<button type="button" id="query"><font size="1">Disaggregate</font></button>
+
 
 	<br/>
 	<div id="loading"></div>
@@ -37,10 +38,11 @@ border-radius:15px;
 </div>
 
 </div>
-<div id="container" style="width:85%; height:400px;"></div>
+<div id="container_raw" style="width:80%; height:400px;"></div>
 
-<div id="pichart" style="width:85%; height:400px;"></div>
-<div id="pie_container" style="width:70%; height:200px;"></div>
+<div id="container" style="width:80%; height:400px;"></div>
+
+<div id="pichart" style="width:80%; height:400px;"></div>
 
 
 <script type="text/javascript">
@@ -50,8 +52,8 @@ border-radius:15px;
 
   $("#start_date").datepicker();
   $("#end_date").datepicker();
-  $("#start_date").val('12/05/2013');
-  $("#end_date").val('12/06/2013');
+  $("#start_date").val('01/21/2014');
+  $("#end_date").val('01/22/2014');
 
   function createPieChart(data,title_text) {
   	chart = new Highcharts.Chart({
@@ -97,10 +99,10 @@ border-radius:15px;
 
 }
  
-  function createAreaChart(series,title_text) {
+  function createAreaChart(series,title_text,container_id) {
   	chart = new Highcharts.Chart({
   		chart : {
-  			renderTo : 'container',
+  			renderTo : container_id,
   			type : 'area',
   			marginRight : 130,
   			marginBottom : 25,
@@ -171,13 +173,45 @@ function datetime_to_epoch(datetime)
 	return epoch;
 }
 
-$("#query").click(function() {
-
-		
+$("#query_raw").click(function() {	
 
 	$("#loading").show();	
 	$("#container").hide();
+	$("#container_raw").hide();
+
 	$("#pichart").hide();
+	$("#loading-div-background").show();
+	
+	var start=datetime_to_epoch($("#start_date").val());
+	var end=datetime_to_epoch($("#end_date").val());
+	var home=$( "#homes option:selected" ).text();
+		
+		var qu={"start":start,"end":end,"home_number":home};
+		
+		$.ajax({
+			type: "POST",
+			async: true,
+			contentType: "application/json; charset=utf-8",
+			url: "/query_raw",
+			data: JSON.stringify(qu),
+			success: function (data) {
+			    		     
+			     $("#loading-div-background").hide();
+
+			    createAreaChart(data["timeseries"],"Aggregate consumption","container_raw");			    
+			    $("#container_raw").show();		
+			},
+			dataType: "json"
+		});
+	});
+
+$("#query").click(function() {
+
+		
+	$("#container_raw").hide();	
+	$("#container").hide();
+	$("#pichart").hide();
+	$("#loading").show();		
 	$("#loading-div-background").show();
 
 
@@ -198,8 +232,9 @@ $("#query").click(function() {
 			    		     
 			     $("#loading-div-background").hide();
 
-			    createAreaChart(data["timeseries"],"Disaggregated consumption");
-			    createPieChart(data["pie"],"Consumption Breakdown");
+			    createAreaChart(data["timeseries"],"Disaggregated consumption","container");
+			    createPieChart(data["pie"],"Consumption Breakdown by Energy");
+			    $("#container_raw").show();	
 			    $("#container").show();		
 			    $("#pichart").show();		    
 			},

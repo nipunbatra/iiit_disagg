@@ -74,4 +74,4 @@ class SMAP(object):
 
     def get_uuid(self, home_number):
         """Returns the UUID corresponding to a home"""
-        return '273e1b0f-ef25-5918-ad67-efa56a834d6e'
+        return '9bcea73f-99ac-5508-87d5-95bbb2b500ce'

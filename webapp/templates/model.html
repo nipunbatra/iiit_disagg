@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block content %}
+<style> 
+div #sidebar
+{
+border:2px solid #a1a1a1;
+padding:5px 10px; 
+border-radius:15px;
+}
+</style>
+<div id="sidebar">
+  Select Home
+  <br/>
+  <select id="homes">
+      
+
+    <option>102</option>
+    <option>503</option>
+    <option>703</option>
+
+  
+  </select>
+  <br/>
+<button type="button" id="edit">Edit model</button>
+</div>
+<div id="container" style="width:85%; height:400px;">
+<textarea id="text_area" rows="10" cols="50"></textarea>
+<br/>
+<button type="button" id="save">Save model</button>
+</div>
+
+
+<script type="text/javascript">
+$("#container").hide();
+$("#edit").click(function() {
+ $("#text_area").val("");
+ $("#container").show();
+  var home=$( "#homes option:selected" ).text();
+    
+    var qu={"home_number":home};
+    
+    $.ajax({
+      type: "POST",
+      async: true,
+      contentType: "application/json; charset=utf-8",
+      url: "/view_model",
+      data: JSON.stringify(qu),
+      success: function (data) {
+          if ("error" in data)
+          {
+
+          } 
+          else
+          {
+            $("#text_area").val(JSON.stringify(data));
+          }         
+                       
+      },
+      dataType: "json"
+    });
+  });
+
+$("#save").click(function() {
+  var home=$( "#homes option:selected" ).text();
+    
+    var qu={"home_number":home, "model":$("#text_area").val()};
+    
+    $.ajax({
+      type: "POST",
+      async: true,
+      contentType: "application/json; charset=utf-8",
+      url: "/save_model",
+      data: JSON.stringify(qu),
+      success: function (data) {
+        
+          if ("error" in data)
+          {
+            alert("Something bad happened!")
+          } 
+          else
+          {
+            location.reload();
+          } 
+          
+
+                
+      },
+      dataType: "json"
+    });
+  });
+
+
+</script>{% endblock %}

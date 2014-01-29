@@ -7,7 +7,7 @@ from nilmtk.sensors.electricity import MainsName, Measurement
 from nilmtk.disaggregate.co_1d import CO_1d
 
 FLAT_NUMBER = 101
-UUID = '273e1b0f-ef25-5918-ad67-efa56a834d6e'
+UUID = '9bcea73f-99ac-5508-87d5-95bbb2b500ce'
 START = 1387996200000
 END = 1388341800000
 DISAGG_FEATURE = Measurement('power', 'active')
@@ -20,6 +20,9 @@ smap_readings = smap.get_readings(UUID, START, END)
 
 # Transform to NILMTK Mains
 df = to_pd_series(smap_readings)
+
+# Downsample
+df = df.resample('1T')
 
 # Creating nilmtk building
 b = Building()

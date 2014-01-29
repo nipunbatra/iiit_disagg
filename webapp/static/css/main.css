@@ -83,13 +83,19 @@ h3 {
 
 #sidebar {
     float: left;
-    width: 10%;
+    width: 8%;
 }
 
 #container {
     float: right;
     width: 100%;
 }  
+
+#container_raw {
+    float: right;
+    width: 100%;
+}  
+
 
 #pichart {
     float: right;
