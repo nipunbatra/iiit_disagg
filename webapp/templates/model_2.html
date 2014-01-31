@@ -1,0 +1,199 @@
+{% extends "layout.html" %}
+{% block content %}
+<style> 
+div #sidebar
+{
+border:2px solid #a1a1a1;
+padding:5px 10px; 
+border-radius:15px;
+}
+</style>
+<div id="sidebar">
+  Select Home
+  <br/>
+  <select id="homes">
+      
+
+    <option>102</option>
+    <option>503</option>
+    <option>703</option>
+
+  
+  </select>
+  <br/>
+  
+  
+</div>
+<div id="container" style="width:85%; height:400px;">
+<fieldset id="buildyourform">
+    <legend>Appliance profile</legend>
+    <input type="button" value="Add an appliance" class="add" id="add" />
+
+</fieldset>
+
+
+<button type="button" id="save">Save model</button>
+
+</div>
+
+
+<script type="text/javascript">
+//$("#container").hide();
+
+  $("#homes").change(function() {
+    //alert($( "#homes option:selected" ).text());
+
+     //addContent("","");
+
+     // Empty the previous content
+     $("#buildyourform div").empty();
+     //serializeContent();
+
+
+     var home=$( "#homes option:selected" ).text();
+    
+    var qu={"home_number":home};
+    
+    $.ajax({
+      type: "POST",
+      async: true,
+      contentType: "application/json; charset=utf-8",
+      url: "/view_model",
+      data: JSON.stringify(qu),
+      success: function (data) {
+          if ("error" in data)
+          {
+
+          } 
+          else
+          {
+            $("#text_area").val(JSON.stringify(data));
+            for (key in data)
+            {
+              addContent(key, data[key]);
+            }
+            //serializeContent();
+          }         
+                       
+      },
+      dataType: "json"
+    });
+
+
+    /*$.ajax({
+     url: "otherCatchesMap.php>",
+     success: function(msg){
+       $("#results").html(msg);
+     }
+   });*/
+  });
+
+
+function serializeContent()
+{    
+    count={};
+    model={};
+     var fieldSet = $("<fieldset id=\"yourform\"><legend>Your Form</legend></fieldset>");
+        $("#buildyourform div").each(function () {
+            var id = "input" + $(this).attr("id").replace("field", "");
+    var power = $(this).find("input.fieldname").first().val();
+    var appliance_name = $(this).find("select.fieldtype").first().val();
+     if (appliance_name in count)
+                {
+                  count[appliance_name]+=1;
+                }
+            else
+            {
+              count[appliance_name]=1;
+            }
+    var appliance_full_name = appliance_name+"_"+count[appliance_name].toString();
+            
+      model[appliance_full_name]=[0, parseInt(power)];
+      //model[appliance_full_name].push(power);
+            //fieldSet.append(power);
+            //fieldSet.append(appliance_full_name);
+        });
+        console.log(model);
+        return model;
+        //$("body").append(fieldSet);
+    
+}
+
+function addContent(key, value)
+{
+  var appliance_name="ac";
+  var appliance_id;
+  var power=1000;
+  if (key!="")
+    {
+
+    var appliance_name = key.split("_")[0];
+    var appliance_id = key.split("_")[1];
+    var power = value[1];
+    }
+  var intId = $("#buildyourform div").length + 1;
+  var fieldWrapper = $("<div class=\"fieldwrapper\" id=\"field" + intId + "\"/>");
+
+  var fPower = $("<span>&nbspPower</span><input type=\"text\" class=\"fieldname\" />");
+  var fName = $("<input type=\"text\" class=\"fieldname\" />");
+  var fType = $("<span>Appliance</span><select class=\"fieldtype\"><option value=\"geyser\">geyser</option> <option value=\"ac\">ac</option> <option value=\"fridge\">fridge</option><option value=\"tv\">tv</option><option value=\"stove\">stove</option><option value=\"kettle\">kettle</option><option value=\"microwave\">microwave</option></select>");
+  var removeButton = $("<input type=\"button\" class=\"remove\" value=\"X\" />");
+  removeButton.click(function () {
+      $(this).parent().remove();
+  });
+
+  fPower.val(power);
+  fName.val(appliance_name);
+  fType.val(appliance_name);
+  fieldWrapper.append(fType);
+  fieldWrapper.append(fPower);
+  //fieldWrapper.append(fName);
+  
+  fieldWrapper.append(removeButton);
+  $("#buildyourform").append(fieldWrapper);
+}
+
+    $("#add").click(function () {
+        addContent("","");
+    });
+
+
+
+$("#save").click(function() {
+  var home=$( "#homes option:selected" ).text();
+
+    var model=serializeContent();
+
+    alert(JSON.stringify(model));
+
+    
+    var qu={"home_number":home, "model":JSON.stringify(model)};
+    console.log(qu);
+    //var qu={"home_number":home, "model":$("#text_area").val()};
+    
+    $.ajax({
+      type: "POST",
+      async: true,
+      contentType: "application/json; charset=utf-8",
+      url: "/save_model",
+      data: JSON.stringify(qu),
+      success: function (data) {
+        
+          if ("error" in data)
+          {
+            alert("Something bad happened!")
+          } 
+          else
+          {
+            location.reload();
+          } 
+          
+
+                
+      },
+      dataType: "json"
+    });
+  });
+
+
+</script>{% endblock %}

@@ -72,7 +72,7 @@ def index():
 
 @app.route('/model')
 def model():
-    return render_template('model.html')
+    return render_template('model_2.html')
 
 
 @app.route('/about')
