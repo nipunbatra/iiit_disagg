@@ -25,9 +25,11 @@ border-radius:15px;
   
 </div>
 <div id="container" style="width:85%; height:400px;">
+      <legend>Appliance profile</legend>
+          <input type="button" value="Add an appliance" class="add" id="add" />
+
+
 <fieldset id="buildyourform">
-    <legend>Appliance profile</legend>
-    <input type="button" value="Add an appliance" class="add" id="add" />
 
 </fieldset>
 
@@ -41,7 +43,7 @@ border-radius:15px;
 
 function load_model(home)
 {
-  $("#buildyourform div").empty();
+  $("#buildyourform").empty();
 
     var qu={"home_number":home};
     
@@ -85,11 +87,13 @@ function serializeContent()
 {    
     count={};
     model={};
-     var fieldSet = $("<fieldset id=\"yourform\"><legend>Your Form</legend></fieldset>");
-        $("#buildyourform div").each(function () {
-            var id = "input" + $(this).attr("id").replace("field", "");
+    $("#buildyourform div").each(function () 
+    {
+
+    var id = "input" + $(this).attr("id").replace("field", "");
     var power = $(this).find("input.fieldname").first().val();
     var appliance_name = $(this).find("select.fieldtype").first().val();
+    console.log(appliance_name);
      if (appliance_name in count)
                 {
                   count[appliance_name]+=1;
@@ -156,7 +160,6 @@ $("#save").click(function() {
 
     var model=serializeContent();
 
-    alert(JSON.stringify(model));
 
     
     var qu={"home_number":home, "model":JSON.stringify(model)};
