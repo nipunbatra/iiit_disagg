@@ -38,20 +38,11 @@ border-radius:15px;
 
 
 <script type="text/javascript">
-//$("#container").hide();
 
-  $("#homes").change(function() {
-    //alert($( "#homes option:selected" ).text());
+function load_model(home)
+{
+  $("#buildyourform div").empty();
 
-     //addContent("","");
-
-     // Empty the previous content
-     $("#buildyourform div").empty();
-     //serializeContent();
-
-
-     var home=$( "#homes option:selected" ).text();
-    
     var qu={"home_number":home};
     
     $.ajax({
@@ -78,14 +69,15 @@ border-radius:15px;
       },
       dataType: "json"
     });
+}
+  
+  load_model("503");
 
-
-    /*$.ajax({
-     url: "otherCatchesMap.php>",
-     success: function(msg){
-       $("#results").html(msg);
-     }
-   });*/
+  $("#homes").change(function() {
+    
+     var home=$( "#homes option:selected" ).text();
+     load_model(home);
+  
   });
 
 
