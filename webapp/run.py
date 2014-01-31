@@ -130,7 +130,7 @@ def query_raw():
     df = df.resample('1T').dropna()
     df.rename(columns={"poweractive": "total"})
 
-    print pd_to_higcharts(df)
+    #print pd_to_higcharts(df)
 
     return pd_to_higcharts(df)
 
