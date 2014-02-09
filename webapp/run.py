@@ -37,7 +37,7 @@ def pd_to_higcharts(predictions):
     total_power = predictions.sum().sum()
     num_rows = len(predictions.index)
     temp = np.empty((num_rows, 2))
-    times = predictions.index.astype(int) / 1e6
+    times = predictions.index.astype('int') / 1e6
     temp[:, 0] = times
     time_series = []
     pie_series = []
@@ -130,7 +130,7 @@ def query_raw():
     df = df.resample('1T').dropna()
     df.rename(columns={"poweractive": "total"})
 
-    #print pd_to_higcharts(df)
+    # print pd_to_higcharts(df)
 
     return pd_to_higcharts(df)
 

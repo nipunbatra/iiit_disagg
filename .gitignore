@@ -11,3 +11,4 @@ _build/
 *.egg-info/
 dist/
 .ropeproject/
+.idea/
