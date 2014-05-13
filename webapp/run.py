@@ -15,6 +15,9 @@ from nilmtk.building import Building
 from nilmtk.sensors.electricity import MainsName, Measurement
 from nilmtk.disaggregate.co_1d import CO_1d
 
+from flask_bootstrap import Bootstrap
+
+
 MODEL_PATH = os.path.abspath("model")
 print MODEL_PATH
 
@@ -52,6 +55,7 @@ def pd_to_higcharts(predictions):
 
 
 app = Flask(__name__)
+Bootstrap(app)
 
 
 def calculate_downsampling_frequency(df, threshold_points=15000):
