@@ -13,11 +13,12 @@ border-radius:15px;
 	Select Home
 	<br/>
 	<select id="homes">
-  		
+    <!--Now loads homes from the JSON
   	<option>503</option>
   	<option>102</option>  
   	
   	<option>703</option>
+    -->    
 
  	</select>
 	<br/>
@@ -53,8 +54,25 @@ border-radius:15px;
 
   $("#start_date").datepicker();
   $("#end_date").datepicker();
-  $("#start_date").val('01/22/2014');
-  $("#end_date").val('01/23/2014');
+  //$("#start_date").val('01/22/2014');
+  //$("#end_date").val('01/23/2014');
+    
+  $.ajax({
+			type: "GET",
+			async: true,
+			contentType: "application/json; charset=utf-8",
+			url: "/get_homes",
+			
+			success: function (data) {
+			     //var houses = $.parseJSON(data);
+			     var home_array = data.homes;
+                 for (var i=0; i<home_array.length; i++)
+                 {  
+                     $("#homes").append("<option>"+home_array[i]+"</option>");
+                 }
+			},
+			dataType: "json"
+		});
 
   function createPieChart(data,title_text) {
   	chart = new Highcharts.Chart({

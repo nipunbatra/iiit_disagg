@@ -19,15 +19,8 @@ from flask_bootstrap import Bootstrap
 
 
 MODEL_PATH = os.path.abspath("model")
-print MODEL_PATH
 
-UUID_MAPPING = {
-    "102": "9bcea73f-99ac-5508-87d5-95bbb2b500ce",
-    "503": "f2fcdc85-3b0c-54b7-a310-5153f8dd6ea0",
-    "703": "fe2cea88-400d-51c9-86af-1eef801d831a"
-}
 SMAP_URL = "http://nms.iiitd.edu.in:9102/"
-
 OFFSET = 0
 TIMEZONE = 'Asia/Kolkata'
 
@@ -63,7 +56,6 @@ def calculate_downsampling_frequency(df, threshold_points=15000):
     num_rows = int(np.sum(df.count()))
     if num_rows > threshold_points:
         factor_in_seconds = int(num_rows / threshold_points)
-        print "DOWNSAMPLING: " + str(factor_in_seconds)
         return str(factor_in_seconds) + 's'
     else:
         return None
@@ -87,6 +79,14 @@ def about():
 @app.route('/visualize')
 def visualize():
     return render_template('visualize.html')
+
+
+@app.route('/get_homes')
+def get_homes():
+    path_to_file = os.path.join(MODEL_PATH, "homes.json")
+    with open(path_to_file) as data_file:
+        homes = json.load(data_file)
+    return json.dumps(homes)
 
 
 @app.route('/view_model', methods=['POST'])
@@ -125,7 +125,7 @@ def query_raw():
 
     # Creating a SMAP interface
     smap = SMAP(SMAP_URL)
-    uuid = UUID_MAPPING[str(home_number)]
+    uuid = smap.find_uuid(home_number)
     smap_readings = smap.get_readings(uuid, start_timestamp, end_timestamp)
 
     df = to_pd_series(smap_readings)
@@ -133,9 +133,6 @@ def query_raw():
     # Downsample
     df = df.resample('1T').dropna()
     df.rename(columns={"poweractive": "total"})
-
-    # print pd_to_higcharts(df)
-
     return pd_to_higcharts(df)
 
 
@@ -148,7 +145,7 @@ def query():
 
     # Creating a SMAP interface
     smap = SMAP(SMAP_URL)
-    uuid = UUID_MAPPING[str(home_number)]
+    uuid = smap.find_uuid(home_number)
     smap_readings = smap.get_readings(uuid, start_timestamp, end_timestamp)
 
     df = to_pd_series(smap_readings)

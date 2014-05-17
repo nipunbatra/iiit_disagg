@@ -6,14 +6,16 @@ from nilmtk.building import Building
 from nilmtk.sensors.electricity import MainsName, Measurement
 from nilmtk.disaggregate.co_1d import CO_1d
 
-FLAT_NUMBER = 101
-UUID = '9bcea73f-99ac-5508-87d5-95bbb2b500ce'
+FLAT_NUMBER = '101'
 START = 1387996200000
 END = 1388341800000
 DISAGG_FEATURE = Measurement('power', 'active')
 
 # Making SMAP connection
 smap = SMAP("http://nms.iiitd.edu.in:9102/")
+
+# Get UUID
+UUID = smap.find_uuid(FLAT_NUMBER)
 
 # Getting data for UUID
 smap_readings = smap.get_readings(UUID, START, END)

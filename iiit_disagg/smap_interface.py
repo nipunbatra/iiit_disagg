@@ -31,7 +31,7 @@ class SMAP(object):
     """sMAP interface
     """
 
-    def __init__(self, base_url, query_path="/api/query/", data_path="backend/api/data/"):
+    def __init__(self, base_url, query_path="/api/query/", data_path="backend/api/data/", uuid_path="backend/api"):
         """
         Parameters
         ----------
@@ -45,6 +45,8 @@ class SMAP(object):
         self.base_url = base_url
         self.query_path = query_path
         self.data_path = data_path
+        self.uuid_path = uuid_path
+        self.uuid_path = "".join([self.base_url, self.uuid_path])
         self.post_url = "".join([self.base_url, self.query_path])
         self.data_path = "".join([self.base_url, self.data_path])
 
@@ -72,6 +74,15 @@ class SMAP(object):
         smap_data = response[0]['Readings']
         return smap_data
 
-    def get_uuid(self, home_number):
+    def find_uuid(self, home_number):
         """Returns the UUID corresponding to a home"""
-        return '9bcea73f-99ac-5508-87d5-95bbb2b500ce'
+
+        query = """select * where Metadata/Instrument/LoadType =
+                "Apartments" and (Metadata/LoadLocation/Building=
+                "Faculty Housing") and Metadata/Instrument/SubLoadType =
+                "Apartment {}" and Metadata/Instrument/SupplyType = "Power"
+                and Metadata/Extra/PhysicalParameter = 'Power'""".format(home_number)
+
+        response = requests.post(self.uuid_path, query)
+        uuid = response.json()[0]["uuid"]
+        return uuid
