@@ -18,7 +18,7 @@ from nilmtk.disaggregate.co_1d import CO_1d
 
 MODEL_PATH = os.path.abspath("model")
 
-SMAP_URL = "http://nms.iiitd.edu.in:9102/"
+SMAP_URL = "http://energy.iiitd.edu.in:9102/"
 OFFSET = 0
 TIMEZONE = 'Asia/Kolkata'
 
